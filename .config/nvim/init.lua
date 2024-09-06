@@ -1,5 +1,3 @@
-local opt = vim.opt
-
 -- opt.number = true
 opt.fillchars = { eob = " " }
 opt.tabstop = 4
@@ -311,6 +309,8 @@ local plugins = {
 				local hl = "DiagnosticSign" .. type
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 			end
+
+			vim.lsp.inlay_hint.enable(true)
 
 			-- configure html server
 			lspconfig["html"].setup({

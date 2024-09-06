@@ -1,3 +1,5 @@
+local opt = vim.opt
+
 -- opt.number = true
 opt.fillchars = { eob = " " }
 opt.tabstop = 4

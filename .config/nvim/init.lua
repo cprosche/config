@@ -312,8 +312,6 @@ local plugins = {
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 			end
 
-			vim.lsp.inlay_hint.enable(true)
-
 			-- configure html server
 			lspconfig["html"].setup({
 				capabilities = capabilities,
@@ -321,10 +319,10 @@ local plugins = {
 			})
 
 			-- configure typescript server with plugin
-			lspconfig["ts_ls"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
+			-- lspconfig["ts_ls"].setup({
+			-- 	capabilities = capabilities,
+			-- 	on_attach = on_attach,
+			-- })
 
 			-- configure css server
 			lspconfig["cssls"].setup({

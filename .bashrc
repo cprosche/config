@@ -128,8 +128,8 @@ alias client='cd /opt/york/ground-software/Bastion/client/'
 alias cat=batcat
 alias tm=tmux
 alias tmkill="tmux kill-session -t"
+alias tma="tmux a -t"
 alias d=docker
-alias gsw="~/start-bastion.sh"
 
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go

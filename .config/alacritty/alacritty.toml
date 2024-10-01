@@ -5,3 +5,6 @@ import = [
 [font]
 normal = {family = "Hack Nerd Font Mono", style = "Regular"}
 size = 21
+
+[window]
+  decorations = "None"

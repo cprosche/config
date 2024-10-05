@@ -105,6 +105,7 @@ alias vim=nvim
 alias t='task'
 alias m='make'
 alias tm=tmux
+alias cat=bat
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH=${PATH}:`go env GOPATH`/bin

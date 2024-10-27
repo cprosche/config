@@ -105,6 +105,7 @@ alias vim=nvim
 alias t='task'
 alias m='make'
 alias tm=tmux
+alias tma='tmux attach -t'
 alias cat=bat
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

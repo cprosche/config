@@ -8,6 +8,12 @@ case $- in
       *) return;;
 esac
 
+if hash neofetch &> /dev/null; then 
+    neofetch
+else 
+    echo "neofetch not available"
+fi
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -101,8 +107,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.bashrc_local.sh ]; then
+    . ~/.bashrc_local.sh
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -117,19 +123,18 @@ if ! shopt -oq posix; then
 fi
 
 # custom aliases
-alias m='make'
-alias t='task'
-alias nv='nvim'
-alias vim='nvim'
+alias m=make
+alias t=task
+alias nv=nvim
+alias vim=nvim
 alias y=yarn
-alias gs='cd /opt/york/ground-software'
-alias bastion='cd /opt/york/ground-software/Bastion/'
-alias client='cd /opt/york/ground-software/Bastion/client/'
 alias cat=batcat
 alias tm=tmux
 alias tmkill="tmux kill-session -t"
 alias tma="tmux a -t"
 alias d=docker
+alias cdf='cd $(find . -type d -print | fzf)'
+alias nvf='nvim $(fzf)'
 
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
@@ -143,3 +148,5 @@ eval $(keychain --eval id_rsa)
 
 eval "$(/home/caderosche/.local/bin/zoxide init --cmd cd bash)"
 
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

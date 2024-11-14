@@ -136,6 +136,11 @@ alias d=docker
 alias cdf='cd $(find . -type d -print | fzf)'
 alias nvf='nvim $(fzf)'
 
+if command -v nvim >/dev/null 2>&1; then
+  export EDITOR=nvim
+  export VISUAL="$EDITOR"
+fi
+
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH

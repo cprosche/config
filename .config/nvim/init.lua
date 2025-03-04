@@ -84,7 +84,6 @@ local plugins = {
 				javascriptreact = { "eslint_d" },
 				typescriptreact = { "eslint_d" },
 				svelte = { "eslint_d" },
-				python = { "pylint" },
 			}
 
 			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
@@ -121,7 +120,6 @@ local plugins = {
 			require("mason-lspconfig").setup({
 				-- list of servers for mason to install
 				ensure_installed = {
-					"tsserver",
 					"html",
 					"cssls",
 					"tailwindcss",
@@ -129,7 +127,6 @@ local plugins = {
 					"lua_ls",
 					"emmet_ls",
 					"prismals",
-					"pyright",
 					"gopls",
 				},
 				-- auto-install configured servers (with lspconfig)
@@ -140,9 +137,6 @@ local plugins = {
 				ensure_installed = {
 					"prettier", -- prettier formatter
 					"stylua", -- lua formatter
-					"isort", -- python formatter
-					"black", -- python formatter
-					"pylint", -- python linter
 					"eslint_d", -- js linter
 				},
 			})
@@ -360,23 +354,11 @@ local plugins = {
 				on_attach = on_attach,
 			})
 
-			-- configure prisma orm server
-			lspconfig["prismals"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
-
 			-- configure emmet language server
 			lspconfig["emmet_ls"].setup({
 				capabilities = capabilities,
 				on_attach = on_attach,
 				filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
-			})
-
-			-- configure python server
-			lspconfig["pyright"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
 			})
 
 			-- configure lua server (with special settings)

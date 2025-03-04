@@ -1,2 +1,6 @@
 .sta-creds
 Taskfile.yml
+.config/Code/
+.config/JetBrains/
+.config/go/
+.config/gopls/

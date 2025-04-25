@@ -9,6 +9,7 @@ case $- in
 esac
 
 if hash neofetch &> /dev/null; then 
+    echo ""
     neofetch
 else 
     echo "neofetch not available"
@@ -146,12 +147,20 @@ export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 . "$HOME/.cargo/env"
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-eval "$(ssh-agent -s)"
-eval $(keychain --eval id_rsa)
+eval "$(ssh-agent -s)" > /dev/null 2>&1
+eval "$(keychain --quiet --eval id_rsa)"
 
 eval "$(/home/caderosche/.local/bin/zoxide init --cmd cd bash)"
+
+# setup fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if command -v fzf >/dev/null 2>&1; then
+    eval "$(fzf --bash)"
+else
+    echo "Warning: fzf is not installed."
+    echo "To install fzf, run the following command:"
+    echo "   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && . ~/.bashrc"
+fi
 
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

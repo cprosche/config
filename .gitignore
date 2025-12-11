@@ -1,3 +1,7 @@
 .sta-creds
 Taskfile.yml
 .config/satdump/
+.config/Code/
+.config/JetBrains/
+.config/go/
+.config/gopls/

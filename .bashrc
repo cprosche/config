@@ -135,11 +135,15 @@ alias tma="tmux a -t"
 alias d=docker
 alias cdf='cd $(find . -type d -print | fzf)'
 alias nvf='nvim $(fzf)'
+alias lg=lazygit
 
 if command -v nvim >/dev/null 2>&1; then
   export EDITOR=nvim
   export VISUAL="$EDITOR"
 fi
+
+# bob neovim version manager
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go

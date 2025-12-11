@@ -1,6 +1,11 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# neofetch on startup
+if command -v neofetch &> /dev/null; then
+    neofetch
+fi
+
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR=nvim
@@ -106,9 +111,21 @@ alias nv='nvim'
 alias vim=nvim
 alias t='task'
 alias m='make'
+alias y='yarn'
 alias tm=tmux
 alias tma='tmux attach -t'
+alias tmkill='tmux kill-session -t'
+alias d=docker
 alias cat=bat
+alias lg=lazygit
+alias cdf='cd $(find . -type d -print | fzf)'
+alias nvf='nvim $(fzf)'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export PATH=${PATH}:`go env GOPATH`/bin
+
+# bob neovim version manager
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+export PATH="${PATH}:$(go env GOPATH)/bin"
+
+# zoxide (cd replacement)
+eval "$(zoxide init --cmd cd zsh)"

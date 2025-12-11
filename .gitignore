@@ -1,5 +1,12 @@
 .sta-creds
 Taskfile.yml
+
+# Machine-specific shell config
+.shell_local
+.bashrc_local.sh
+.zshrc_local
+
+# app configs that I don't want to be the same everywhere
 .config/satdump/
 .config/Code/
 .config/JetBrains/

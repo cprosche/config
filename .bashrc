@@ -1,6 +1,4 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
 
 # If not running interactively, don't do anything
 case $- in
@@ -8,165 +6,81 @@ case $- in
       *) return;;
 esac
 
-if hash neofetch &> /dev/null; then 
-    echo ""
-    neofetch
-else 
-    echo "neofetch not available"
-fi
-
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
+# History settings
 HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
 shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
+# Check window size after each command
 shopt -s checkwinsize
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-
-# make less more friendly for non-text input files, see lesspipe(1)
+# Make less more friendly for non-text input files
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# set variable identifying the chroot you work in (used in the prompt below)
+# Prompt
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
-fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
-unset color_prompt force_color_prompt
+unset color_prompt
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# enable color support of ls and also add handy aliases
+# Enable color support of ls
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
 
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
+# ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bashrc_local.sh ]; then
-    . ~/.bashrc_local.sh
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# Bash completion
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
-# custom aliases
-alias m=make
-alias t=task
-alias nv=nvim
-alias vim=nvim
-alias y=yarn
-alias cat=batcat
-alias tm=tmux
-alias tmkill="tmux kill-session -t"
-alias tma="tmux a -t"
-alias d=docker
-alias cdf='cd $(find . -type d -print | fzf)'
-alias nvf='f=$(fzf) && [ -n "$f" ] && nvim "$f"'
-alias nvg='f=$(git diff --name-only HEAD | fzf) && [ -n "$f" ] && nvim "$f"'  # nvim git changed files
-alias lg=lazygit
-alias versions='~/config/versions.sh'
+# Source machine-specific config
+[ -f ~/.bashrc_local.sh ] && . ~/.bashrc_local.sh
 
-if command -v nvim >/dev/null 2>&1; then
-  export EDITOR=nvim
-  export VISUAL="$EDITOR"
+# Source common shell config (aliases, exports, etc.)
+[ -f ~/.shell_common ] && source ~/.shell_common
+
+# Linux-specific: cargo
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
+# Linux-specific: ssh-agent via keychain
+if command -v keychain &> /dev/null; then
+    eval "$(keychain --quiet --eval id_rsa 2>/dev/null)"
 fi
 
-# bob neovim version manager
-export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+# zoxide (cd replacement)
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init --cmd cd bash)"
+fi
 
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
-export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
-. "$HOME/.cargo/env"
-
-eval "$(ssh-agent -s)" > /dev/null 2>&1
-eval "$(keychain --quiet --eval id_rsa)"
-
-eval "$(/home/caderosche/.local/bin/zoxide init --cmd cd bash)"
-
-# setup fzf
+# fzf
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-if command -v fzf >/dev/null 2>&1; then
-    eval "$(fzf --bash)"
-else
-    echo "Warning: fzf is not installed."
-    echo "To install fzf, run the following command:"
-    echo "   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install && . ~/.bashrc"
+if command -v fzf &> /dev/null; then
+    eval "$(fzf --bash 2>/dev/null)" || true
 fi
 
-# Generated for envman. Do not edit.
+# envman (if installed)
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

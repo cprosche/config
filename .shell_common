@@ -1,0 +1,56 @@
+# Common shell configuration - sourced by both .zshrc and .bashrc
+
+# Detect OS
+case "$(uname -s)" in
+    Darwin*) _OS=macos;;
+    Linux*)  _OS=linux;;
+    *)       _OS=unknown;;
+esac
+
+# neofetch on startup
+if command -v neofetch &> /dev/null; then
+    neofetch
+fi
+
+# Editor
+if command -v nvim &> /dev/null; then
+    export EDITOR=nvim
+    export VISUAL="$EDITOR"
+fi
+
+# Aliases
+alias nv='nvim'
+alias vim='nvim'
+alias t='task'
+alias m='make'
+alias y='yarn'
+alias tm='tmux'
+alias tma='tmux attach -t'
+alias tmkill='tmux kill-session -t'
+alias d='docker'
+alias lg='lazygit'
+alias cdf='cd $(find . -type d -print | fzf)'
+alias nvf='f=$(fzf) && [ -n "$f" ] && nvim "$f"'
+alias nvg='f=$(git diff --name-only HEAD | fzf) && [ -n "$f" ] && nvim "$f"'  # nvim git changed files
+alias versions='~/config/versions.sh'
+
+# bat/batcat (different name on Debian/Ubuntu)
+if command -v bat &> /dev/null; then
+    alias cat='bat'
+elif command -v batcat &> /dev/null; then
+    alias cat='batcat'
+fi
+
+# bob neovim version manager
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
+
+# Go
+if command -v go &> /dev/null; then
+    export PATH="${PATH}:$(go env GOPATH)/bin"
+fi
+
+# zoxide (cd replacement) - initialized in shell-specific rc files
+# since it needs different args for zsh vs bash
+
+# Machine-specific config (not checked into git)
+[ -f ~/.shell_local ] && source ~/.shell_local

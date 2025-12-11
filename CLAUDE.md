@@ -20,8 +20,10 @@ Or manually with just stow: `stow .`
 - `.config/nvim/init.lua` - Neovim configuration (lazy.nvim plugin manager, gruvbox theme)
 - `.config/alacritty/` - Alacritty terminal configuration
 - `.tmux.conf` - Tmux configuration (gruvbox theme)
-- `.zshrc` - Zsh config (oh-my-zsh, gruvbox theme)
-- `.bashrc` - Bash config (sources `.bashrc_local.sh` for machine-specific settings)
+- `.shell_common` - Shared shell config (aliases, exports) sourced by both zsh and bash
+- `.shell_local` - Machine-specific config (gitignored, create manually)
+- `.zshrc` - Zsh config (oh-my-zsh, gruvbox theme, sources .shell_common)
+- `.bashrc` - Bash config (sources .shell_common and .bashrc_local.sh for machine-specific settings)
 - `Makefile` - Quick SSH shortcuts
 - `Brewfile` - macOS packages (install with `brew bundle`)
 - `.nvim-version` - Pinned neovim version (managed by bob)

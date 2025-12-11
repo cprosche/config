@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # Display versions of installed tools
 
 printf "%-15s %s\n" "Tool" "Version"

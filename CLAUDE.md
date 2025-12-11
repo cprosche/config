@@ -80,6 +80,11 @@ Or manually with just stow: `stow .`
 - `;xt` - TODOs in Trouble
 - `;ft` - Find TODOs (Telescope)
 
+**Surround:**
+- `ys{motion}{char}` - Add surround (e.g. `ysiw"` wraps word in quotes)
+- `ds{char}` - Delete surround (e.g. `ds"` removes quotes)
+- `cs{old}{new}` - Change surround (e.g. `cs"'` changes `"` to `'`)
+
 **Other:**
 - `;l` - Trigger linting
 - `;mp` - Format file

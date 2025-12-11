@@ -425,6 +425,54 @@ local plugins = {
 			vim.keymap.set({ "n", "v" }, "<leader>ca", require("actions-preview").code_actions)
 		end,
 	},
+	{
+		"folke/trouble.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		cmd = "Trouble",
+		keys = {
+			{ "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+			{ "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer Diagnostics (Trouble)" },
+			{ "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix List (Trouble)" },
+		},
+		opts = {},
+	},
+	{
+		"folke/todo-comments.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("todo-comments").setup()
+			vim.keymap.set("n", "<leader>xt", "<cmd>TodoTrouble<cr>", { desc = "TODOs (Trouble)" })
+			vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find TODOs" })
+		end,
+	},
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = function()
+			require("nvim-autopairs").setup({
+				check_ts = true, -- use treesitter
+			})
+			-- integrate with nvim-cmp
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+			local cmp = require("cmp")
+			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+		end,
+	},
+	{
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+		config = function()
+			local wk = require("which-key")
+			wk.setup()
+			wk.add({
+				{ "<leader>f", group = "find" },
+				{ "<leader>x", group = "diagnostics" },
+				{ "<leader>c", group = "code" },
+				{ "<leader>m", group = "format" },
+			})
+		end,
+	},
 }
 
 require("lazy").setup(plugins)

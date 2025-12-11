@@ -73,6 +73,13 @@ Or manually with just stow: `stow .`
 - `[d` / `]d` - Prev/next diagnostic
 - `;ca` - Code actions
 
+**Trouble/Diagnostics:**
+- `;xx` - Toggle diagnostics list
+- `;xX` - Buffer diagnostics only
+- `;xq` - Quickfix list
+- `;xt` - TODOs in Trouble
+- `;ft` - Find TODOs (Telescope)
+
 **Other:**
 - `;l` - Trigger linting
 - `;mp` - Format file

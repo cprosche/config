@@ -137,6 +137,7 @@ alias d=docker
 alias cdf='cd $(find . -type d -print | fzf)'
 alias nvf='nvim $(fzf)'
 alias lg=lazygit
+alias versions='~/config/versions.sh'
 
 if command -v nvim >/dev/null 2>&1; then
   export EDITOR=nvim

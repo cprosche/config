@@ -120,6 +120,7 @@ alias cat=bat
 alias lg=lazygit
 alias cdf='cd $(find . -type d -print | fzf)'
 alias nvf='nvim $(fzf)'
+alias versions='~/config/versions.sh'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

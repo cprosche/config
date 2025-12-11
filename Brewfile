@@ -10,6 +10,7 @@ brew "zoxide"
 brew "neofetch"
 brew "keychain"
 brew "lazygit"
+brew "jq"
 
 # Languages
 brew "go"

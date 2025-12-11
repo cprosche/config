@@ -25,6 +25,7 @@ Or manually with just stow: `stow .`
 - `Makefile` - Quick SSH shortcuts
 - `Brewfile` - macOS packages (install with `brew bundle`)
 - `.nvim-version` - Pinned neovim version (managed by bob)
+- `versions.sh` - Display versions of all installed tools
 
 ## Shell Aliases
 
@@ -42,6 +43,7 @@ Or manually with just stow: `stow .`
 | `cat` | bat/batcat |
 | `cdf` | cd with fzf |
 | `nvf` | nvim with fzf |
+| `versions` | show tool versions |
 
 ## Key Neovim Settings
 
@@ -52,13 +54,27 @@ Or manually with just stow: `stow .`
 
 ## Neovim Keybindings
 
-- `;fg` - Telescope git files
-- `;ff` - Telescope find files
-- `;fr` - Telescope recent files
-- `;fs` - Telescope live grep
+**Telescope:**
+- `;fg` - Git files
+- `;ff` - Find files
+- `;fr` - Recent files
+- `;fs` - Live grep
 - `;fc` - Grep string under cursor
+
+**LSP:**
+- `gd` - Go to definition
+- `gD` - Go to declaration
+- `gr` - References
+- `gi` - Implementation
+- `K` - Hover docs
+- `;rn` - Rename symbol
+- `;D` - Type definition
+- `;d` - Show diagnostics
+- `[d` / `]d` - Prev/next diagnostic
+- `;ca` - Code actions
+
+**Other:**
 - `;l` - Trigger linting
 - `;mp` - Format file
-- `;ca` - Code actions
 - `gcc` - Comment line
 - `gc` - Comment selection

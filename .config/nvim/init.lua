@@ -1,6 +1,7 @@
 local opt = vim.opt
 
--- opt.number = true
+opt.number = true
+opt.relativenumber = true
 opt.fillchars = { eob = " " }
 opt.tabstop = 4
 opt.shiftwidth = 4
@@ -58,12 +59,20 @@ local plugins = {
 					"elixir",
 					"heex",
 					"javascript",
+					"typescript",
+					"tsx",
 					"html",
 					"css",
 					"go",
 					"rust",
 					"toml",
 					"c_sharp",
+					"python",
+					"bash",
+					"markdown",
+					"markdown_inline",
+					"json",
+					"yaml",
 				},
 				sync_install = false,
 				highlight = { enable = true },
@@ -138,6 +147,7 @@ local plugins = {
 					"prettier", -- prettier formatter
 					"stylua", -- lua formatter
 					"eslint_d", -- js linter
+					"goimports", -- go imports organizer
 				},
 			})
 		end,
@@ -162,7 +172,7 @@ local plugins = {
 					yaml = { "prettier" },
 					markdown = { "prettier" },
 					lua = { "stylua" },
-					go = { "gopls" },
+					go = { "goimports", "gofmt" },
 				},
 				format_on_save = {
 					lsp_fallback = true,
@@ -293,7 +303,21 @@ local plugins = {
 			-- import cmp-nvim-lsp plugin
 			local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
-			local on_attach = function() end
+			local on_attach = function(client, bufnr)
+				local opts = { buffer = bufnr, silent = true }
+
+				-- LSP keybindings
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+				vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+				vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
+				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+				vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+				vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+			end
 
 			-- used to enable autocompletion (assign to every lsp server config)
 			local capabilities = cmp_nvim_lsp.default_capabilities()

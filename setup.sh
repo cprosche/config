@@ -61,13 +61,13 @@ install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt update
         sudo apt install -y tmux fzf bat zoxide neofetch stow keychain golang rustc cargo \
-            nodejs npm python3 python3-pip cmake make gcc unzip curl git
+            nodejs npm python3 python3-pip cmake make gcc unzip curl git sshfs jq
     elif command -v dnf &> /dev/null; then
         sudo dnf install -y tmux fzf bat zoxide neofetch stow keychain golang rust cargo \
-            nodejs npm python3 python3-pip cmake make gcc unzip curl git lazygit
+            nodejs npm python3 python3-pip cmake make gcc unzip curl git lazygit fuse-sshfs jq
     elif command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm tmux fzf bat zoxide neofetch stow keychain go rust \
-            nodejs npm python python-pip cmake make gcc unzip curl git lazygit
+            nodejs npm python python-pip cmake make gcc unzip curl git lazygit sshfs jq
     else
         echo "Unsupported Linux package manager"
         exit 1
@@ -90,7 +90,7 @@ install_windows_packages() {
     fi
     scoop bucket add extras
     scoop bucket add nerd-fonts
-    scoop install tmux fzf bat zoxide neofetch go rust nodejs python cmake make lazygit
+    scoop install tmux fzf bat zoxide neofetch go rust nodejs python cmake make lazygit jq sshfs
     scoop install alacritty
     scoop install Hack-NF
 }

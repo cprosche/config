@@ -11,6 +11,8 @@ brew "neofetch"
 brew "keychain"
 brew "lazygit"
 brew "jq"
+# sshfs requires macFUSE kernel extension on macOS - install manually if needed
+# Linux: installed via setup.sh
 
 # Languages
 brew "go"

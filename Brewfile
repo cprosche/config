@@ -10,6 +10,7 @@ brew "zoxide"
 brew "neofetch"
 brew "keychain"
 brew "lazygit"
+brew "git-delta"  # better diffs
 brew "jq"
 # sshfs requires macFUSE kernel extension on macOS - install manually if needed
 # Linux: installed via setup.sh

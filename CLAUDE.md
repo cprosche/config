@@ -43,6 +43,7 @@ Or manually with just stow: `stow .`
 | `cat` | bat/batcat |
 | `cdf` | cd with fzf |
 | `nvf` | nvim with fzf |
+| `nvg` | nvim git changed files |
 | `versions` | show tool versions |
 
 ## Key Neovim Settings
@@ -59,6 +60,7 @@ Or manually with just stow: `stow .`
 - `;ff` - Find files
 - `;fr` - Recent files
 - `;fs` - Live grep
+- `;fm` - Git modified files
 - `;fc` - Grep string under cursor
 
 **LSP:**

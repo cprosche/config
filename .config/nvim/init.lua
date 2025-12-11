@@ -17,7 +17,7 @@ opt.spelllang = "en_us"
 
 -- bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
 		"clone",
@@ -127,7 +127,6 @@ local plugins = {
 			})
 
 			require("mason-lspconfig").setup({
-				-- list of servers for mason to install
 				ensure_installed = {
 					"html",
 					"cssls",
@@ -138,8 +137,7 @@ local plugins = {
 					"prismals",
 					"gopls",
 				},
-				-- auto-install configured servers (with lspconfig)
-				automatic_installation = true, -- not the same as ensure_installed
+				automatic_enable = false, -- we handle enabling below
 			})
 
 			require("mason-tool-installer").setup({
@@ -224,6 +222,7 @@ local plugins = {
 			keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
 			keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
 			keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
+			keymap.set("n", "<leader>fm", "<cmd>Telescope git_status<cr>", { desc = "Fuzzy find git modified files" })
 			keymap.set(
 				"n",
 				"<leader>fc",
@@ -238,6 +237,7 @@ local plugins = {
 		dependencies = {
 			"hrsh7th/cmp-buffer", -- source for text in buffer
 			"hrsh7th/cmp-path", -- source for file system paths
+			"hrsh7th/cmp-nvim-lsp", -- LSP source for nvim-cmp
 			"L3MON4D3/LuaSnip", -- snippet engine
 			"saadparwaiz1/cmp_luasnip", -- for autocompletion
 			"rafamadriz/friendly-snippets", -- useful snippets
@@ -288,129 +288,11 @@ local plugins = {
 			})
 		end,
 	},
-	{
-		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufNewFile" },
-		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			{ "antosha417/nvim-lsp-file-operations", config = true },
-		},
-		config = function()
-			-- import lspconfig plugin
-			local lspconfig = require("lspconfig")
-			local util = require("lspconfig/util")
-
-			-- import cmp-nvim-lsp plugin
-			local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
-			local on_attach = function(client, bufnr)
-				local opts = { buffer = bufnr, silent = true }
-
-				-- LSP keybindings
-				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-				vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-				vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
-				vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-				vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-				vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
-			end
-
-			-- used to enable autocompletion (assign to every lsp server config)
-			local capabilities = cmp_nvim_lsp.default_capabilities()
-
-			-- Change the Diagnostic symbols in the sign column (gutter)
-			-- (not in youtube nvim video)
-			local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-			end
-
-			-- configure html server
-			lspconfig["html"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
-
-			-- configure typescript server with plugin
-			-- lspconfig["ts_ls"].setup({
-			-- 	capabilities = capabilities,
-			-- 	on_attach = on_attach,
-			-- })
-
-			-- configure css server
-			lspconfig["cssls"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
-
-			-- configure gopls server
-			lspconfig.gopls.setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-				cmd = { "gopls" },
-				filetypes = { "go", "gomod", "gowork", "gotmpl" },
-				root_dir = util.root_pattern("go.work", "go.mod", ".git"),
-				settings = {
-					gopls = {
-						completeUnimported = true,
-						usePlaceholders = true,
-						analyses = {
-							unusedparams = true,
-						},
-					},
-				},
-			})
-
-			-- configure tailwindcss server
-			lspconfig["tailwindcss"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
-
-			-- configure svelte server
-			lspconfig["svelte"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-			})
-
-			-- configure emmet language server
-			lspconfig["emmet_ls"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-				filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
-			})
-
-			-- configure lua server (with special settings)
-			lspconfig["lua_ls"].setup({
-				capabilities = capabilities,
-				on_attach = on_attach,
-				settings = { -- custom settings for lua
-					Lua = {
-						-- make the language server recognize "vim" global
-						diagnostics = {
-							globals = { "vim" },
-						},
-						workspace = {
-							-- make language server aware of runtime files
-							library = {
-								[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-								[vim.fn.stdpath("config") .. "/lua"] = true,
-							},
-						},
-					},
-				},
-			})
-		end,
-	},
+	{ "antosha417/nvim-lsp-file-operations", config = true },
 	{
 		"mrcjkb/rustaceanvim",
-		version = "^3", -- Recommended
-		ft = { "rust" },
+		version = "^5",
+		lazy = false,
 	},
 	{
 		"numToStr/Comment.nvim",
@@ -484,3 +366,95 @@ local plugins = {
 }
 
 require("lazy").setup(plugins)
+
+-- LSP Configuration using vim.lsp.config (neovim 0.11+)
+local cmp_nvim_lsp = require("cmp_nvim_lsp")
+local capabilities = cmp_nvim_lsp.default_capabilities()
+
+-- Diagnostic symbols
+local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+for type, icon in pairs(signs) do
+	local hl = "DiagnosticSign" .. type
+	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end
+
+-- LSP keybindings via LspAttach autocmd
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(args)
+		local opts = { buffer = args.buf, silent = true }
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+		vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+		vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
+		vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+		vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+		vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+	end,
+})
+
+-- Configure LSP servers using vim.lsp.config
+vim.lsp.config("html", {
+	capabilities = capabilities,
+})
+
+vim.lsp.config("cssls", {
+	capabilities = capabilities,
+})
+
+vim.lsp.config("gopls", {
+	capabilities = capabilities,
+	cmd = { "gopls" },
+	filetypes = { "go", "gomod", "gowork", "gotmpl" },
+	root_markers = { "go.work", "go.mod", ".git" },
+	settings = {
+		gopls = {
+			completeUnimported = true,
+			usePlaceholders = true,
+			analyses = {
+				unusedparams = true,
+			},
+		},
+	},
+})
+
+vim.lsp.config("tailwindcss", {
+	capabilities = capabilities,
+})
+
+vim.lsp.config("svelte", {
+	capabilities = capabilities,
+})
+
+vim.lsp.config("emmet_ls", {
+	capabilities = capabilities,
+	filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
+})
+
+vim.lsp.config("lua_ls", {
+	capabilities = capabilities,
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = { "vim" },
+			},
+			workspace = {
+				library = {
+					[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+					[vim.fn.stdpath("config") .. "/lua"] = true,
+				},
+			},
+		},
+	},
+})
+
+-- Enable LSP servers
+vim.lsp.enable("html")
+vim.lsp.enable("cssls")
+vim.lsp.enable("gopls")
+vim.lsp.enable("tailwindcss")
+vim.lsp.enable("svelte")
+vim.lsp.enable("emmet_ls")
+vim.lsp.enable("lua_ls")

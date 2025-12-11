@@ -61,13 +61,13 @@ install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt update
         sudo apt install -y tmux fzf bat zoxide neofetch stow keychain golang rustc cargo \
-            nodejs npm python3 python3-pip cmake make gcc unzip curl git sshfs jq
+            nodejs npm python3 python3-pip cmake make gcc unzip curl git sshfs jq git-delta
     elif command -v dnf &> /dev/null; then
         sudo dnf install -y tmux fzf bat zoxide neofetch stow keychain golang rust cargo \
-            nodejs npm python3 python3-pip cmake make gcc unzip curl git lazygit fuse-sshfs jq
+            nodejs npm python3 python3-pip cmake make gcc unzip curl git lazygit fuse-sshfs jq git-delta
     elif command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm tmux fzf bat zoxide neofetch stow keychain go rust \
-            nodejs npm python python-pip cmake make gcc unzip curl git lazygit sshfs jq
+            nodejs npm python python-pip cmake make gcc unzip curl git lazygit sshfs jq git-delta
     else
         echo "Unsupported Linux package manager"
         exit 1
@@ -83,6 +83,16 @@ install_macos_packages() {
     brew bundle --file="$SCRIPT_DIR/Brewfile"
 }
 
+setup_lazygit_macos() {
+    # lazygit uses ~/Library/Application Support on macOS instead of ~/.config
+    local lg_dir="$HOME/Library/Application Support/lazygit"
+    mkdir -p "$lg_dir"
+    if [ -f "$lg_dir/config.yml" ] && [ ! -L "$lg_dir/config.yml" ]; then
+        rm "$lg_dir/config.yml"
+    fi
+    ln -sf "$HOME/.config/lazygit/config.yml" "$lg_dir/config.yml"
+}
+
 install_windows_packages() {
     if ! command -v scoop &> /dev/null; then
         echo "Installing Scoop..."
@@ -90,7 +100,7 @@ install_windows_packages() {
     fi
     scoop bucket add extras
     scoop bucket add nerd-fonts
-    scoop install tmux fzf bat zoxide neofetch go rust nodejs python cmake make lazygit jq sshfs
+    scoop install tmux fzf bat zoxide neofetch go rust nodejs python cmake make lazygit jq sshfs delta
     scoop install alacritty
     scoop install Hack-NF
 }
@@ -159,6 +169,7 @@ case "$OS" in
         install_macos_packages
         install_neovim
         install_oh_my_zsh
+        setup_lazygit_macos
         ;;
     windows)
         install_windows_packages

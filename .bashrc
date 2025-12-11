@@ -135,7 +135,8 @@ alias tmkill="tmux kill-session -t"
 alias tma="tmux a -t"
 alias d=docker
 alias cdf='cd $(find . -type d -print | fzf)'
-alias nvf='nvim $(fzf)'
+alias nvf='f=$(fzf) && [ -n "$f" ] && nvim "$f"'
+alias nvg='f=$(git diff --name-only HEAD | fzf) && [ -n "$f" ] && nvim "$f"'  # nvim git changed files
 alias lg=lazygit
 alias versions='~/config/versions.sh'
 

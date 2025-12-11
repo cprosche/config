@@ -119,7 +119,8 @@ alias d=docker
 alias cat=bat
 alias lg=lazygit
 alias cdf='cd $(find . -type d -print | fzf)'
-alias nvf='nvim $(fzf)'
+alias nvf='f=$(fzf) && [ -n "$f" ] && nvim "$f"'
+alias nvg='f=$(git diff --name-only HEAD | fzf) && [ -n "$f" ] && nvim "$f"'  # nvim git changed files
 alias versions='~/config/versions.sh'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

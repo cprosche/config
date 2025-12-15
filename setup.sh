@@ -66,12 +66,32 @@ install_fzf_linux() {
     rm /tmp/fzf.tar.gz /tmp/fzf
 }
 
+install_tmux_linux() {
+    # tmux 3.5+ required to fix SIXEL bug with neovim 0.11+
+    local current_version=$(tmux -V 2>/dev/null | grep -oP '\d+\.\d+' || echo "0")
+    if [ "$(printf '%s\n' "3.5" "$current_version" | sort -V | head -n1)" = "3.5" ]; then
+        echo "tmux $current_version already installed"
+        return
+    fi
+    echo "Installing tmux from source (need 3.5+ for neovim compatibility)..."
+    sudo apt install -y libevent-dev ncurses-dev build-essential bison pkg-config
+    TMUX_VERSION=$(curl -s "https://api.github.com/repos/tmux/tmux/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
+    curl -Lo /tmp/tmux.tar.gz "https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz"
+    tar xf /tmp/tmux.tar.gz -C /tmp
+    cd /tmp/tmux-${TMUX_VERSION}
+    ./configure && make
+    sudo make install
+    cd - > /dev/null
+    rm -rf /tmp/tmux-${TMUX_VERSION} /tmp/tmux.tar.gz
+}
+
 install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt update
-        sudo apt install -y tmux bat zoxide neofetch stow keychain golang rustc cargo \
+        sudo apt install -y bat zoxide neofetch stow keychain golang rustc cargo \
             nodejs npm python3 python3-pip cmake make gcc unzip curl git sshfs jq git-delta
-        # fzf and lazygit not in apt or too old, install from GitHub
+        # tmux from source (apt version too old), fzf and lazygit from GitHub
+        install_tmux_linux
         install_fzf_linux
         install_lazygit_linux
     elif command -v dnf &> /dev/null; then
@@ -162,6 +182,13 @@ setup_neovim_plugins() {
     if command -v nvim &> /dev/null; then
         nvim --headless "+Lazy! restore" +qa 2>/dev/null || true
         echo "Neovim plugins restored to pinned versions"
+
+        # Build telescope-fzf-native (requires make)
+        local fzf_native_dir="$HOME/.local/share/nvim/lazy/telescope-fzf-native.nvim"
+        if [ -d "$fzf_native_dir" ] && [ ! -f "$fzf_native_dir/build/libfzf.so" ]; then
+            echo "Building telescope-fzf-native..."
+            make -C "$fzf_native_dir"
+        fi
     fi
 }
 

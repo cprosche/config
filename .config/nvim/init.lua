@@ -112,7 +112,6 @@ local plugins = {
 	{
 		"williamboman/mason.nvim",
 		dependencies = {
-			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 		},
 		config = function()
@@ -126,26 +125,25 @@ local plugins = {
 				},
 			})
 
-			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"html",
-					"cssls",
-					"tailwindcss",
-					"svelte",
-					"lua_ls",
-					"emmet_ls",
-					"prismals",
-					"gopls",
-				},
-				automatic_enable = false, -- we handle enabling below
-			})
-
+			-- Using mason-tool-installer for both LSP servers and tools
+			-- (mason-lspconfig not needed with neovim 0.11 native LSP config)
 			require("mason-tool-installer").setup({
 				ensure_installed = {
-					"prettier", -- prettier formatter
-					"stylua", -- lua formatter
-					"eslint_d", -- js linter
-					"goimports", -- go imports organizer
+					-- LSP servers
+					"html-lsp",
+					"css-lsp",
+					"tailwindcss-language-server",
+					"svelte-language-server",
+					"lua-language-server",
+					"emmet-ls",
+					"prisma-language-server",
+					"gopls",
+					-- Formatters
+					"prettier",
+					"stylua",
+					"goimports",
+					-- Linters
+					"eslint_d",
 				},
 			})
 		end,

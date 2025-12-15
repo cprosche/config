@@ -57,11 +57,23 @@ install_lazygit_linux() {
     fi
 }
 
+install_fzf_linux() {
+    echo "Installing fzf from GitHub..."
+    FZF_VERSION=$(curl -s "https://api.github.com/repos/junegunn/fzf/releases/latest" | grep -Po '"tag_name": "v?\K[^"]*')
+    curl -Lo /tmp/fzf.tar.gz "https://github.com/junegunn/fzf/releases/latest/download/fzf-${FZF_VERSION}-linux_amd64.tar.gz"
+    tar xf /tmp/fzf.tar.gz -C /tmp fzf
+    sudo install /tmp/fzf /usr/local/bin
+    rm /tmp/fzf.tar.gz /tmp/fzf
+}
+
 install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt update
-        sudo apt install -y tmux fzf bat zoxide neofetch stow keychain golang rustc cargo \
+        sudo apt install -y tmux bat zoxide neofetch stow keychain golang rustc cargo \
             nodejs npm python3 python3-pip cmake make gcc unzip curl git sshfs jq git-delta
+        # fzf and lazygit not in apt or too old, install from GitHub
+        install_fzf_linux
+        install_lazygit_linux
     elif command -v dnf &> /dev/null; then
         sudo dnf install -y tmux fzf bat zoxide neofetch stow keychain golang rust cargo \
             nodejs npm python3 python3-pip cmake make gcc unzip curl git lazygit fuse-sshfs jq git-delta
@@ -71,10 +83,6 @@ install_linux_packages() {
     else
         echo "Unsupported Linux package manager"
         exit 1
-    fi
-    # lazygit not in apt, install from GitHub
-    if command -v apt &> /dev/null; then
-        install_lazygit_linux
     fi
 }
 
@@ -163,7 +171,6 @@ case "$OS" in
         install_linux_packages
         install_neovim
         install_nerd_font_linux
-        install_oh_my_zsh
         ;;
     macos)
         install_macos_packages

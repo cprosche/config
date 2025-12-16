@@ -6,6 +6,9 @@ Taskfile.yml
 .bashrc_local.sh
 .zshrc_local
 
+# Local scripts (machine-specific)
+local/
+
 # app configs that I don't want to be the same everywhere
 .config/satdump/
 .config/Code/

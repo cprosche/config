@@ -117,6 +117,9 @@ install_node_linux() {
 }
 
 install_rust_linux() {
+    # Set TMPDIR to home to avoid cross-device link errors in containers
+    export TMPDIR="$HOME/.rustup/tmp"
+    mkdir -p "$TMPDIR"
     if command -v rustup &> /dev/null; then
         echo "Updating rust via rustup..."
         rustup update stable

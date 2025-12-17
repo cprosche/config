@@ -106,11 +106,22 @@ install_tmux_linux() {
     rm -rf /tmp/tmux-${TMUX_VERSION} /tmp/tmux.tar.gz
 }
 
+install_node_linux() {
+    if command -v node &> /dev/null && command -v npm &> /dev/null; then
+        echo "Node.js and npm already installed"
+        return
+    fi
+    echo "Installing Node.js via NodeSource..."
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+    sudo apt install -y nodejs
+}
+
 install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt update
         sudo apt install -y bat neofetch stow keychain golang rustc cargo \
-            nodejs npm python3 python3-pip cmake make gcc unzip curl git sshfs jq
+            python3 python3-pip cmake make gcc unzip curl git sshfs jq
+        install_node_linux
         # tmux from source (apt version too old), others from GitHub (not in older Ubuntu repos)
         install_tmux_linux
         install_fzf_linux

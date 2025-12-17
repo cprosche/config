@@ -117,6 +117,20 @@ install_node_linux() {
 }
 
 install_rust_linux() {
+    # Get latest stable version
+    local latest_version=$(curl -s https://static.rust-lang.org/dist/channel-rust-stable.toml | grep -m1 -oP '(?<=version = ")[^"]+')
+
+    # Check if already on latest via rustup
+    if [ -f "$HOME/.cargo/bin/rustc" ]; then
+        source "$HOME/.cargo/env"
+        local current_version=$(rustc --version | grep -oP '\d+\.\d+\.\d+')
+        if [ "$current_version" = "$latest_version" ]; then
+            echo "Rust $current_version is already latest, skipping"
+            return
+        fi
+        echo "Rust $current_version installed, latest is $latest_version"
+    fi
+
     # Remove system rust to avoid conflicts
     if command -v apt &> /dev/null; then
         echo "Removing system rust packages..."

@@ -1,22 +1,19 @@
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# History settings
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_dups
 
-# Theme
-ZSH_THEME="gruvbox"
-SOLARIZED_THEME="dark"
+# Key bindings
+bindkey -e
 
-# Plugins
-plugins=(git)
-
-source $ZSH/oh-my-zsh.sh
+# Completion
+autoload -Uz compinit && compinit
 
 # Source common shell config (aliases, exports, etc.)
 [ -f ~/.shell_common ] && source ~/.shell_common
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# zoxide (cd replacement)
-if command -v zoxide &> /dev/null; then
-    eval "$(zoxide init --cmd cd zsh)"
-fi

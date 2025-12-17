@@ -55,8 +55,15 @@ if command -v go &> /dev/null && go env GOPATH &> /dev/null; then
     export PATH="${PATH}:$(go env GOPATH)/bin"
 fi
 
-# zoxide (cd replacement) - initialized in shell-specific rc files
-# since it needs different args for zsh vs bash
+# zoxide (cd replacement) - replaces cd command
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init --cmd cd ${ZSH_VERSION:+zsh}${BASH_VERSION:+bash})"
+fi
+
+# Starship prompt
+if command -v starship &> /dev/null; then
+    eval "$(starship init ${ZSH_VERSION:+zsh}${BASH_VERSION:+bash})"
+fi
 
 # Machine-specific config (not checked into git)
 [ -f ~/.shell_local ] && source ~/.shell_local

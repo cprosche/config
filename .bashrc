@@ -63,17 +63,9 @@ fi
 # Source common shell config (aliases, exports, etc.)
 [ -f ~/.shell_common ] && source ~/.shell_common
 
-# Linux-specific: cargo
-[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
-
 # Linux-specific: ssh-agent via keychain
 if command -v keychain &> /dev/null; then
     eval "$(keychain --quiet --eval id_rsa 2>/dev/null)"
-fi
-
-# zoxide (cd replacement)
-if command -v zoxide &> /dev/null; then
-    eval "$(zoxide init --cmd cd bash)"
 fi
 
 # fzf

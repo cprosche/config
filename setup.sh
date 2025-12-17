@@ -203,14 +203,13 @@ install_windows_packages() {
     scoop install Hack-NF
 }
 
-install_oh_my_zsh() {
-    if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        echo "Installing oh-my-zsh..."
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-        # Install gruvbox theme
-        curl -fsSL https://raw.githubusercontent.com/sbugzu/gruvbox-zsh/master/gruvbox.zsh-theme \
-            -o "$HOME/.oh-my-zsh/themes/gruvbox.zsh-theme"
+install_starship() {
+    if command -v starship &> /dev/null; then
+        echo "Starship already installed"
+        return
     fi
+    echo "Installing starship prompt..."
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
 }
 
 install_nerd_font_linux() {
@@ -284,18 +283,20 @@ case "$OS" in
         install_linux_packages
         install_neovim
         install_nerd_font_linux
+        install_starship
         install_claude_code
         ;;
     macos)
         install_macos_packages
         install_neovim
-        install_oh_my_zsh
         setup_lazygit_macos
+        install_starship
         install_claude_code
         ;;
     windows)
         install_windows_packages
         install_neovim
+        install_starship
         install_claude_code
         ;;
 esac

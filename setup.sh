@@ -116,11 +116,23 @@ install_node_linux() {
     sudo apt install -y nodejs
 }
 
+install_rust_linux() {
+    if command -v rustup &> /dev/null; then
+        echo "Updating rust via rustup..."
+        rustup update stable
+    else
+        echo "Installing rust via rustup..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source "$HOME/.cargo/env"
+    fi
+}
+
 install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt update
-        sudo apt install -y bat neofetch stow keychain golang rustc cargo \
+        sudo apt install -y bat neofetch stow keychain golang \
             python3 python3-pip cmake make gcc unzip curl git sshfs jq
+        install_rust_linux
         install_node_linux
         # tmux from source (apt version too old), others from GitHub (not in older Ubuntu repos)
         install_tmux_linux

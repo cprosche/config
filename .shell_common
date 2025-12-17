@@ -44,6 +44,12 @@ fi
 # bob neovim version manager
 export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 
+# Cargo/Rust
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+# Claude Code CLI
+export PATH="$HOME/.claude/local/bin:$PATH"
+
 # Go
 if command -v go &> /dev/null && go env GOPATH &> /dev/null; then
     export PATH="${PATH}:$(go env GOPATH)/bin"

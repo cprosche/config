@@ -95,7 +95,7 @@ install_tmux_linux() {
         return
     fi
     echo "Installing tmux from source (need 3.5+ for neovim compatibility)..."
-    sudo apt install -y libevent-dev ncurses-dev build-essential bison pkg-config
+    sudo apt-get install -y libevent-dev ncurses-dev build-essential bison pkg-config
     TMUX_VERSION=$(curl -s "https://api.github.com/repos/tmux/tmux/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
     curl -Lo /tmp/tmux.tar.gz "https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz"
     tar xf /tmp/tmux.tar.gz -C /tmp
@@ -113,7 +113,7 @@ install_node_linux() {
     fi
     echo "Installing Node.js via NodeSource..."
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-    sudo apt install -y nodejs
+    sudo apt-get install -y nodejs
 }
 
 install_rust_linux() {
@@ -134,7 +134,7 @@ install_rust_linux() {
     # Remove system rust to avoid conflicts
     if command -v apt &> /dev/null; then
         echo "Removing system rust packages..."
-        sudo apt remove -y rustc cargo 2>/dev/null || true
+        sudo apt-get remove -y rustc cargo 2>/dev/null || true
     fi
 
     # Clean up any existing rustup state to avoid cross-device link issues in containers
@@ -147,8 +147,8 @@ install_rust_linux() {
 
 install_linux_packages() {
     if command -v apt &> /dev/null; then
-        sudo apt update
-        sudo apt install -y bat neofetch stow keychain golang \
+        sudo apt-get update
+        sudo apt-get install -y bat neofetch stow keychain golang \
             python3 python3-pip cmake make gcc unzip curl git sshfs jq
         install_rust_linux
         install_node_linux
@@ -307,3 +307,7 @@ setup_neovim_plugins
 echo "Setup complete!"
 echo "Neovim version: $NVIM_VERSION (managed by bob)"
 echo "Run 'bob list' to see installed versions"
+
+# Source shell config for immediate use
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+[ -f "$HOME/.shell_common" ] && source "$HOME/.shell_common"

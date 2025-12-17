@@ -66,6 +66,27 @@ install_fzf_linux() {
     rm /tmp/fzf.tar.gz /tmp/fzf
 }
 
+install_zoxide_linux() {
+    if command -v zoxide &> /dev/null; then
+        echo "zoxide already installed"
+        return
+    fi
+    echo "Installing zoxide from GitHub..."
+    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+}
+
+install_delta_linux() {
+    if command -v delta &> /dev/null; then
+        echo "delta already installed"
+        return
+    fi
+    echo "Installing git-delta from GitHub..."
+    DELTA_VERSION=$(curl -s "https://api.github.com/repos/dandavison/delta/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
+    curl -Lo /tmp/delta.deb "https://github.com/dandavison/delta/releases/latest/download/git-delta_${DELTA_VERSION}_amd64.deb"
+    sudo dpkg -i /tmp/delta.deb || sudo apt-get install -f -y
+    rm /tmp/delta.deb
+}
+
 install_tmux_linux() {
     # tmux 3.5+ required to fix SIXEL bug with neovim 0.11+
     local current_version=$(tmux -V 2>/dev/null | grep -oP '\d+\.\d+' || echo "0")
@@ -88,12 +109,14 @@ install_tmux_linux() {
 install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt update
-        sudo apt install -y bat zoxide neofetch stow keychain golang rustc cargo \
-            nodejs npm python3 python3-pip cmake make gcc unzip curl git sshfs jq git-delta
-        # tmux from source (apt version too old), fzf and lazygit from GitHub
+        sudo apt install -y bat neofetch stow keychain golang rustc cargo \
+            nodejs npm python3 python3-pip cmake make gcc unzip curl git sshfs jq
+        # tmux from source (apt version too old), others from GitHub (not in older Ubuntu repos)
         install_tmux_linux
         install_fzf_linux
         install_lazygit_linux
+        install_zoxide_linux
+        install_delta_linux
     elif command -v dnf &> /dev/null; then
         sudo dnf install -y tmux fzf bat zoxide neofetch stow keychain golang rust cargo \
             nodejs npm python3 python3-pip cmake make gcc unzip curl git lazygit fuse-sshfs jq git-delta
@@ -155,6 +178,22 @@ install_nerd_font_linux() {
     fi
 }
 
+install_claude_code() {
+    if command -v claude &> /dev/null; then
+        echo "Claude Code CLI already installed"
+        return
+    fi
+    echo "Installing Claude Code CLI..."
+    case "$OS" in
+        linux|macos)
+            curl -fsSL https://claude.ai/install.sh | bash
+            ;;
+        windows)
+            powershell -Command "irm https://claude.ai/install.ps1 | iex"
+            ;;
+    esac
+}
+
 check_nvim_dependencies() {
     echo "Checking neovim plugin dependencies..."
     local missing=()
@@ -198,16 +237,19 @@ case "$OS" in
         install_linux_packages
         install_neovim
         install_nerd_font_linux
+        install_claude_code
         ;;
     macos)
         install_macos_packages
         install_neovim
         install_oh_my_zsh
         setup_lazygit_macos
+        install_claude_code
         ;;
     windows)
         install_windows_packages
         install_neovim
+        install_claude_code
         ;;
 esac
 

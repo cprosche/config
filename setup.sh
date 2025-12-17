@@ -280,10 +280,11 @@ case "$OS" in
         ;;
 esac
 
-# Stow dotfiles
+# Stow dotfiles (--adopt moves conflicting files into repo, then git checkout restores ours)
 echo "Symlinking dotfiles with stow..."
 cd "$SCRIPT_DIR"
-stow .
+stow --adopt .
+git checkout .
 
 # Check dependencies and setup neovim
 check_nvim_dependencies || true

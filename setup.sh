@@ -117,17 +117,18 @@ install_node_linux() {
 }
 
 install_rust_linux() {
-    # Set TMPDIR to home to avoid cross-device link errors in containers
-    export TMPDIR="$HOME/.rustup/tmp"
-    mkdir -p "$TMPDIR"
-    if command -v rustup &> /dev/null; then
-        echo "Updating rust via rustup..."
-        rustup update stable
-    else
-        echo "Installing rust via rustup..."
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source "$HOME/.cargo/env"
+    # Remove system rust to avoid conflicts
+    if command -v apt &> /dev/null; then
+        echo "Removing system rust packages..."
+        sudo apt remove -y rustc cargo 2>/dev/null || true
     fi
+
+    # Clean up any existing rustup state to avoid cross-device link issues in containers
+    rm -rf "$HOME/.rustup"
+
+    echo "Installing latest rust via rustup..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source "$HOME/.cargo/env"
 }
 
 install_linux_packages() {

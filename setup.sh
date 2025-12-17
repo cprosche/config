@@ -116,6 +116,13 @@ install_node_linux() {
     sudo apt-get install -y nodejs
 }
 
+install_git_linux() {
+    echo "Installing latest git from PPA..."
+    sudo add-apt-repository -y ppa:git-core/ppa
+    sudo apt-get update
+    sudo apt-get install -y git
+}
+
 install_rust_linux() {
     # Check if already on latest via rustup
     if [ -f "$HOME/.cargo/bin/rustc" ]; then
@@ -147,7 +154,8 @@ install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt-get update
         sudo apt-get install -y bat neofetch stow keychain golang \
-            python3 python3-pip cmake make gcc unzip curl git sshfs jq
+            python3 python3-pip cmake make gcc unzip curl sshfs jq software-properties-common
+        install_git_linux
         install_rust_linux
         install_node_linux
         # tmux from source (apt version too old), others from GitHub (not in older Ubuntu repos)

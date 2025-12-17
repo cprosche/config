@@ -76,3 +76,8 @@ fi
 
 # envman (if installed)
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+
+# zoxide (cd replacement) - MUST be at end of config
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init --cmd cd bash)"
+fi

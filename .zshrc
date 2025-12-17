@@ -17,3 +17,8 @@ autoload -Uz compinit && compinit
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# zoxide (cd replacement) - MUST be at end of config
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init --cmd cd zsh)"
+fi

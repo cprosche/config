@@ -48,8 +48,8 @@ export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
 # Cargo/Rust
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
-# Claude Code CLI
-export PATH="$HOME/.claude/local/bin:$PATH"
+# Claude Code CLI (may be in either location depending on install method)
+export PATH="$HOME/.local/bin:$HOME/.claude/local/bin:$PATH"
 
 # Go
 if command -v go &> /dev/null && go env GOPATH &> /dev/null; then

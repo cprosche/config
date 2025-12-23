@@ -226,8 +226,8 @@ install_nerd_font_linux() {
 }
 
 install_claude_code() {
-    # Check directly for binary (PATH may not include ~/.claude/local/bin yet)
-    if [ -x "$HOME/.claude/local/bin/claude" ]; then
+    # Check directly for binary (PATH may not be set up yet)
+    if [ -x "$HOME/.local/bin/claude" ] || [ -x "$HOME/.claude/local/bin/claude" ]; then
         echo "Claude Code CLI already installed"
         return
     fi

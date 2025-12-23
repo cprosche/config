@@ -14,6 +14,9 @@ esac
 
 echo "Detected OS: $OS"
 
+# Ensure common paths are available for installers (zoxide, claude, etc.)
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+
 # Package manager install functions
 install_brew() {
     if ! command -v brew &> /dev/null; then

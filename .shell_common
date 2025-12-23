@@ -7,9 +7,10 @@ case "$(uname -s)" in
     *)       _OS=unknown;;
 esac
 
-# neofetch on startup
-if command -v neofetch &> /dev/null; then
+# neofetch on startup (guard against running twice)
+if command -v neofetch &> /dev/null && [ -z "$_NEOFETCH_SHOWN" ]; then
     neofetch
+    export _NEOFETCH_SHOWN=1
 fi
 
 # Editor

@@ -124,16 +124,13 @@ install_git_linux() {
 }
 
 install_rust_linux() {
-    # Check if already on latest via rustup
-    if [ -f "$HOME/.cargo/bin/rustc" ]; then
-        source "$HOME/.cargo/env"
-        local current_version=$(rustc --version | grep -oP '\d+\.\d+\.\d+')
-        local latest_version=$(curl -s https://static.rust-lang.org/dist/channel-rust-stable.toml | grep -oP 'version = "\K[0-9]+\.[0-9]+\.[0-9]+' | head -1)
-        echo "Rust installed: $current_version, latest: $latest_version"
-        if [ "$current_version" = "$latest_version" ]; then
-            echo "Rust is already latest, skipping"
-            return
-        fi
+    # Source cargo env if it exists
+    [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+
+    # Check if rust is already installed (system or rustup)
+    if command -v rustc &> /dev/null && command -v cargo &> /dev/null; then
+        echo "Rust already installed: $(rustc --version)"
+        return
     fi
 
     # Remove system rust to avoid conflicts

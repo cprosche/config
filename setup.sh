@@ -58,6 +58,10 @@ install_lazygit_linux() {
 }
 
 install_fzf_linux() {
+    if command -v fzf &> /dev/null; then
+        echo "fzf already installed"
+        return
+    fi
     echo "Installing fzf from GitHub..."
     FZF_VERSION=$(curl -s "https://api.github.com/repos/junegunn/fzf/releases/latest" | grep -Po '"tag_name": "v?\K[^"]*')
     curl -Lo /tmp/fzf.tar.gz "https://github.com/junegunn/fzf/releases/latest/download/fzf-${FZF_VERSION}-linux_amd64.tar.gz"
@@ -222,7 +226,8 @@ install_nerd_font_linux() {
 }
 
 install_claude_code() {
-    if command -v claude &> /dev/null; then
+    # Check directly for binary (PATH may not include ~/.claude/local/bin yet)
+    if [ -x "$HOME/.claude/local/bin/claude" ]; then
         echo "Claude Code CLI already installed"
         return
     fi

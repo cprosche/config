@@ -30,6 +30,8 @@ alias tma='tmux attach -t'
 alias tmkill='tmux kill-session -t'
 alias d='docker'
 alias lg='lazygit'
+alias ll='ls -la'
+alias l='ls -la'
 alias cdf='cd $(find . -type d -print | fzf)'
 alias nvf='f=$(fzf) && [ -n "$f" ] && nvim "$f"'
 alias nvg='f=$(git diff --name-only HEAD | fzf) && [ -n "$f" ] && nvim "$f"'  # nvim git changed files

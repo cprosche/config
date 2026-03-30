@@ -5,6 +5,7 @@
     diffFilter = delta --color-only
 
 [delta]
+    true-color = always
     dark = true
     syntax-theme = gruvbox-dark
     plus-style = syntax "#4b5632"

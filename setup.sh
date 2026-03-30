@@ -87,11 +87,8 @@ install_delta_linux() {
         echo "delta already installed"
         return
     fi
-    echo "Installing git-delta from GitHub..."
-    DELTA_VERSION=$(curl -s "https://api.github.com/repos/dandavison/delta/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
-    curl -Lo /tmp/delta.deb "https://github.com/dandavison/delta/releases/latest/download/git-delta_${DELTA_VERSION}_amd64.deb"
-    sudo dpkg -i /tmp/delta.deb || sudo apt-get install -f -y
-    rm /tmp/delta.deb
+    echo "Installing git-delta via cargo..."
+    cargo install git-delta
 }
 
 install_tmux_linux() {

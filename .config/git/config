@@ -7,10 +7,10 @@
 [delta]
     dark = true
     syntax-theme = gruvbox-dark
-    plus-style = syntax "#3c3836"
-    plus-emph-style = syntax "#b8bb26"
-    minus-style = syntax "#3c3836"
-    minus-emph-style = syntax "#fb4934"
+    plus-style = syntax "#4b5632"
+    plus-emph-style = syntax "#98971a"
+    minus-style = syntax "#53302a"
+    minus-emph-style = syntax "#cc241d"
     line-numbers = true
     line-numbers-plus-style = "#98971a"
     line-numbers-minus-style = "#cc241d"

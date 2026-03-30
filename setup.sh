@@ -82,15 +82,6 @@ install_zoxide_linux() {
     curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 }
 
-install_delta_linux() {
-    if command -v delta &> /dev/null; then
-        echo "delta already installed"
-        return
-    fi
-    echo "Installing git-delta via cargo..."
-    cargo install git-delta
-}
-
 install_tmux_linux() {
     # tmux 3.5+ required to fix SIXEL bug with neovim 0.11+
     local current_version=$(tmux -V 2>/dev/null | grep -oP '\d+\.\d+' || echo "0")
@@ -164,13 +155,12 @@ install_linux_packages() {
         install_fzf_linux
         install_lazygit_linux
         install_zoxide_linux
-        install_delta_linux
     elif command -v dnf &> /dev/null; then
         sudo dnf install -y tmux fzf bat zoxide neofetch stow keychain golang rust cargo \
-            nodejs npm python3 python3-pip cmake make gcc unzip curl git lazygit fuse-sshfs jq git-delta
+            nodejs npm python3 python3-pip cmake make gcc unzip curl git lazygit fuse-sshfs jq
     elif command -v pacman &> /dev/null; then
         sudo pacman -S --noconfirm tmux fzf bat zoxide neofetch stow keychain go rust \
-            nodejs npm python python-pip cmake make gcc unzip curl git lazygit sshfs jq git-delta
+            nodejs npm python python-pip cmake make gcc unzip curl git lazygit sshfs jq
     else
         echo "Unsupported Linux package manager"
         exit 1

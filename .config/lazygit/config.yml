@@ -1,4 +1,4 @@
 git:
   pagers:
     - colorArg: always
-      pager: delta --paging=never --true-color=always --dark --syntax-theme=gruvbox-dark --plus-style='#ebdbb2 #2e4b1a' --plus-emph-style='#ebdbb2 #4b7a1a' --minus-style='#ebdbb2 #6b1a1a' --minus-emph-style='#ebdbb2 #a32020' --line-numbers --line-numbers-plus-style='#98971a' --line-numbers-minus-style='#cc241d'
+      pager: "delta --paging=never --true-color=always --dark --syntax-theme=gruvbox-dark --plus-style=\"#ebdbb2 #2e4b1a\" --plus-emph-style=\"#ebdbb2 #4b7a1a\" --minus-style=\"#ebdbb2 #6b1a1a\" --minus-emph-style=\"#ebdbb2 #a32020\" --line-numbers --line-numbers-plus-style=#98971a --line-numbers-minus-style=#cc241d"

@@ -1,0 +1,16 @@
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    dark = true
+    syntax-theme = gruvbox-dark
+    plus-style = syntax "#3c3836"
+    plus-emph-style = syntax "#79740e"
+    minus-style = syntax "#3c3836"
+    minus-emph-style = syntax "#9d0006"
+    line-numbers = true
+    line-numbers-plus-style = "#98971a"
+    line-numbers-minus-style = "#cc241d"

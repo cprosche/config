@@ -146,7 +146,7 @@ install_linux_packages() {
     if command -v apt &> /dev/null; then
         sudo apt-get update
         sudo apt-get install -y bat neofetch stow keychain golang \
-            python3 python3-pip cmake make gcc unzip curl sshfs jq software-properties-common
+            python3 python3-pip cmake make gcc unzip curl sshfs jq software-properties-common xclip
         install_git_linux
         install_rust_linux
         install_node_linux

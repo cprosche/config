@@ -3,9 +3,6 @@
 normal = {family = "Hack Nerd Font Mono", style = "Regular"}
 size = 21
 
-[window]
-  decorations = "None"
-
 [general]
 import = [
     "~/.config/alacritty/gruvbox_dark.toml"
